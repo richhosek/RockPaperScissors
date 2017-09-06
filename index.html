@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Rock, Paper, Scissors</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="https://bootswatch.com/cosmo/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="styles/site.css">
+  </head>
+  <body>
+      <!-- Container Div -->
+    <div class="container">
+      <h1>Play Rock Paper Scissors</h1>
+      <div class="row" id="scores">
+        <div class="col-md-4">Wins<br><span id="wins">0</span></div>  
+        <div class="col-md-4">Ties<br><span id="ties">0</span></div>
+        <div class="col-md-4">Losses<br><span id="losses">0</span></div>
+      </div>
+      <div class="row">
+      <div class="col-md-6"><h4>HUMAN</h4>
+        <img id="human" src="images/RockPaperScissors.gif"><br>
+      </div>
+      <div class="col-md-6"><h4>COMPUTER</h4>
+        <img id="computer" src="images/RockPaperScissors.gif">
+      </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12" id="humanChoice">
+          <h3>&nbsp;</h3>
+          <button id="r" class="btn btn-lg">ROCK</button>
+          <button id="p" class="btn btn-lg">PAPER</button>
+          <button id="s" class="btn btn-lg">SCISSORS</button>
+        </div>
+        <div class="col-md-12" id="playAgain">
+          <h3 id="message">You...</h3>
+          <button class="btn btn-lg">PLAY AGAIN</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <<script>
+      var wins = 0, ties = 0, losses = 0;
+      // variable names to make the associative array cleaner
+      var r = "r", p = "p", s = "s";
+      // All the game logic in one associative array
+      var rpc = {r:{r:0, p:-1, s:1}, p:{r:1, p:0, s:-1}, s:{r:-1, p:1, s:0}};
+      var computerChoices = [r, p, s];
+      var humanImages = {r: "rock.png", p: "paper.jpg", s: "scissors.png"};
+      var computerImages = {r: "therock.jpg", p: "origami.jpg", s: "scissorhands.jpg"};
+      var resultMessage = ["Lose", "Tie", "Win"];
+      
+      document.getElementById("humanChoice").addEventListener("click", function(event){
+        console.log(event.target.nodeName);
+        if (event.target.nodeName == "BUTTON") { // only react to button clicks
+          humanChoice = event.target.id;
+          computerChoice =  computerChoices[Math.floor(Math.random() * computerChoices.length)]
+          result = rpc[humanChoice][computerChoice];
+          document.getElementById("human").src = "images/" + humanImages[humanChoice];
+          document.getElementById("computer").src = "images/" + computerImages[computerChoice];
+          wins += result == 1;
+          ties += result == 0;
+          losses += result == -1;
+          document.getElementById("wins").innerHTML = wins;
+          document.getElementById("ties").innerHTML = ties;
+          document.getElementById("losses").innerHTML = losses;
+          document.getElementById("message").innerHTML = "You " + resultMessage[result + 1];
+          document.getElementById("humanChoice").classList.add("hide");
+          document.getElementById("playAgain").classList.remove("hide");
+        }
+        event.stopPropagation();
+      });
+      document.getElementById("playAgain").addEventListener("click", function(event){
+        // Reset the game
+        document.getElementById("human").src = "images/RockPaperScissors.gif";
+        document.getElementById("computer").src = "images/RockPaperScissors.gif";
+        document.getElementById("humanChoice").classList.remove("hide");
+        document.getElementById("playAgain").classList.add("hide");
+      });
+      // hide this div when the page loads -- but AFTER added the "click" event listener
+      document.getElementById("playAgain").classList.add("hide");
+
+    </script>
+  </body>
+</html>
